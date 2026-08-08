@@ -151,11 +151,33 @@ sudo /usr/local/bin/morning_healthcheck.sh
 for mnt in client1 vol1 v3 v4 baseline tuned optimized multi single; do findmnt /mnt/$mnt > /dev/null 2>&1 && echo "✓ /mnt/$mnt" || echo "✗ /mnt/$mnt"; done
 
 
+-----> Scenario  
+
+Scenario 1: Map storage path end to end
+
+showmount -e 127.0.0.1
+findmnt /mnt/client1
+ls -la /mnt/client1
+df -h /mnt/client1
 
 
+Scenario 2: Simulate multi-volume layout
 
+ls /srv/nfs/
+showmount -e 127.0.0.1
+touch /srv/nfs/aidata/ai_model.bin && echo "aidata write OK"
+touch /srv/nfs/scratch/temp.dat && echo "scratch write OK"
+ls /srv/nfs/aidata/
+ls /srv/nfs/scratch/
 
+Distributed System Challenge
 
+dd if=/dev/zero of=/mnt/client1/bigfile bs=1M count=200 &
+sleep 2
+sudo systemctl stop nfs-kernel-server
+sleep 3
+sudo systemctl start nfs-kernel-server
+ls -lh /mnt/client1/bigfile
 
 
 
