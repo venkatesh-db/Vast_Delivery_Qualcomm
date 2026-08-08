@@ -62,6 +62,8 @@ findmnt -t nfs -o TARGET
 
 sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 2>&1 && echo "OK" || echo "FAILED"
 
+findmnt -t nfs,nfs4 -o TARGET
+
 
 
 
