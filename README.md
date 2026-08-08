@@ -3,34 +3,15 @@ sudo apt install -y nfs-common nfs-kernel-server lvm2 sysstat iotop fio iperf3 n
 
 dpkg -l nfs-common nfs-kernel-server fio iperf3 sysstat lvm2 2>&1 | grep -E "^ii|^un"
 
+sudo apt install -y dstat
+
+which dstat && echo "✓ dstat installed"
+
 for tool in fio iperf3 iostat iotop dstat nfsstat nfsiostat mountstats showmount rpcinfo nvme lsblk lshw ethtool nmap traceroute tc ss netstat mpstat vmstat sar hping3 nload irqbalance; do which $tool > /dev/null 2>&1 && echo "✓ $tool" || echo "✗ MISSING: $tool"; done
 
-sudo apt install -y \
-  nfs-common \
-  nfs-kernel-server \
-  lvm2 \
-  sysstat \
-  iotop \
-  dstat \
-  fio \
-  iperf3 \
-  net-tools \
-  ethtool \
-  hping3 \
-  nmap \
-  traceroute \
-  nload \
-  irqbalance \
-  cifs-utils \
-  smbclient \
-  nvme-cli \
-  iproute2 \
-  util-linux \
-  lshw \
-  bc \
-  tree \
-  curl \
-  wget
+sudo sed -i 's/ENABLED="false"/ENABLED="true"/' /etc/default/sysstat && sudo systemctl enable sysstat && sudo systemctl start sysstat && systemctl is-active sysstat
+
+
 
 
 
