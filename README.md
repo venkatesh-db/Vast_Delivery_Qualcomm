@@ -64,6 +64,8 @@ sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 2>&1 && echo "OK" || echo
 
 findmnt -t nfs,nfs4 -o TARGET
 
+sudo chown $USER:$USER /srv/nfs/vol1 /srv/nfs/aidata /srv/nfs/scratch && touch /mnt/client1/test_write && echo "✓ Write OK on client1" && touch /mnt/tuned/test_write && echo "✓ Write OK on tuned" && touch /mnt/optimized/test_write && echo "✓ Write OK on optimized" && rm -f /mnt/client1/test_write /mnt/tuned/test_write /mnt/optimized/test_write
+
 
 
 
