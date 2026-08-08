@@ -22,21 +22,21 @@ showmount -e 127.0.0.1
 
 ## Distributed System Challenge
 ```bash
-# Terminal 1 — start writing
-dd if=/dev/zero of=/mnt/client1/bigfile bs=1M count=200 &
 
-# Simulate CNode failure
-sleep 2
-sudo systemctl stop nfs-kernel-server
-sleep 3
+Terminal 1 — Start writing:
 
-# Recover
-sudo systemctl start nfs-kernel-server
-sleep 2
-wait
+dd if=/dev/zero of=/mnt/client1/bigfile bs=1M count=200
+
+Terminal 2 — Simulate failure and recovery:
+
+sleep 3 && sudo systemctl stop nfs-kernel-server && echo "SERVER STOPPED" && sleep 5 && sudo systemctl start nfs-kernel-server && echo "SERVER RESTARTED"
+
+Terminal 1 — After dd finishes or errors:
+
 ls -lh /mnt/client1/bigfile
 echo "Recovery complete"
-```
+rm -f /mnt/client1/bigfile
+                                          
 
 ---
 
