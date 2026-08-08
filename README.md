@@ -12,6 +12,16 @@ for tool in fio iperf3 iostat iotop dstat nfsstat nfsiostat mountstats showmount
 sudo sed -i 's/ENABLED="false"/ENABLED="true"/' /etc/default/sysstat && sudo systemctl enable sysstat && sudo systemctl start sysstat && systemctl is-active sysstat
 
 
+sudo mkdir -p /srv/nfs/vol1 /srv/nfs/aidata /srv/nfs/scratch /srv/nfs/archive && sudo chown $USER:$USER /srv/nfs/vol1 /srv/nfs/aidata /srv/nfs/scratch && sudo chmod 755 /srv/nfs/vol1 /srv/nfs/aidata /srv/nfs/scratch && echo "Directories created"
+
+grep -q "/srv/nfs/vol1" /etc/exports || sudo bash -c 'cat >> /etc/exports << EOF
+/srv/nfs/vol1    127.0.0.1(rw,sync,no_subtree_check,no_root_squash)
+/srv/nfs/aidata  127.0.0.1(rw,sync,no_subtree_check,no_root_squash)
+/srv/nfs/scratch 127.0.0.1(rw,sync,no_subtree_check,no_root_squash)
+/srv/nfs/archive 127.0.0.1(ro,sync,no_subtree_check)
+EOF'
+cat /etc/exports | grep srv
+
 
 
 
