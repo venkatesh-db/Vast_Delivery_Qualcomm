@@ -1,4 +1,35 @@
 
+
+sudo apt install -y \
+  nfs-common \
+  nfs-kernel-server \
+  lvm2 \
+  sysstat \
+  iotop \
+  dstat \
+  fio \
+  iperf3 \
+  net-tools \
+  ethtool \
+  hping3 \
+  nmap \
+  traceroute \
+  nload \
+  irqbalance \
+  cifs-utils \
+  smbclient \
+  nvme-cli \
+  iproute2 \
+  util-linux \
+  lshw \
+  bc \
+  tree \
+  curl \
+  wget
+
+
+
+
 ## 0. Install everything first
 
 ```bash
