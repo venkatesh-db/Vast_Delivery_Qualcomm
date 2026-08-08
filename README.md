@@ -66,6 +66,27 @@ findmnt -t nfs,nfs4 -o TARGET
 
 sudo chown $USER:$USER /srv/nfs/vol1 /srv/nfs/aidata /srv/nfs/scratch && touch /mnt/client1/test_write && echo "✓ Write OK on client1" && touch /mnt/tuned/test_write && echo "✓ Write OK on tuned" && touch /mnt/optimized/test_write && echo "✓ Write OK on optimized" && rm -f /mnt/client1/test_write /mnt/tuned/test_write /mnt/optimized/test_write
 
+--> V
+
+sudo dd if=/dev/zero of=/tmp/lvm_disk.img bs=1M count=500 2>&1 | tail -1
+
+LOOP=$(sudo losetup -f --show /tmp/lvm_disk.img) && echo "Loop device: $LOOP"
+
+sudo pvcreate $LOOP
+
+sudo vgcreate vast_vg $LOOP
+
+sudo lvcreate -L 400M -n vol1 vast_vg
+
+sudo mkfs.ext4 /dev/vast_vg/vol1 2>&1 | tail -3
+
+sudo mount /dev/vast_vg/vol1 /mnt/lvmvol && sudo chown $USER:$USER /mnt/lvmvol && df -h /mnt/lvmvol
+
+
+
+
+
+
 
 
 
