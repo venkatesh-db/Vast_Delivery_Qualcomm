@@ -60,6 +60,11 @@ sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/v
 
 findmnt -t nfs -o TARGET
 
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 2>&1 && echo "OK" || echo "FAILED"
+
+
+
+
 
 
 
