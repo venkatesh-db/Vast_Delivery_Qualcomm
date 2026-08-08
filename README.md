@@ -23,8 +23,7 @@ cat /etc/exports | grep srv
 
 sudo systemctl enable nfs-kernel-server && sudo systemctl start nfs-kernel-server && sudo systemctl enable rpcbind && sudo systemctl start rpcbind && sudo exportfs -ra && showmount -e 127.0.0.1
 
-
-
+for mnt in data client1 vol1 v3 v4 baseline tuned optimized multi single vast-data vast-scratch vast-archive lvmvol; do sudo mkdir -p /mnt/$mnt && echo "✓ /mnt/$mnt"; done
 
 
 
