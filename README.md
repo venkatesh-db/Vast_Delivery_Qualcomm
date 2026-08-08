@@ -157,6 +157,9 @@ for mnt in client1 vol1 v3 v4 baseline tuned optimized multi single; do findmnt 
 
 sudo systemctl start nfs-kernel-server && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/vol1 && sudo mount -t nfs -o vers=3 127.0.0.1:/srv/nfs/vol1 /mnt/v3 && sudo mount -t nfs -o vers=4 127.0.0.1:/srv/nfs/vol1 /mnt/v4 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/baseline && sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/vol1 /mnt/tuned && sudo mount -t nfs -o vers=3,nconnect=16,rsize=1048576,wsize=1048576,noatime,hard,proto=tcp 127.0.0.1:/srv/nfs/vol1 /mnt/optimized && sudo mount -t nfs -o vers=3,nconnect=8 127.0.0.1:/srv/nfs/vol1 /mnt/multi && sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single && echo "ALL MOUNTS READY"
 
+Before Each Training Day — Just Run This One Command:
+
+sudo systemctl daemon-reload && sudo systemctl start nfs-kernel-server && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/vol1 && sudo mount -t nfs -o vers=3 127.0.0.1:/srv/nfs/vol1 /mnt/v3 && sudo mount -t nfs -o vers=4 127.0.0.1:/srv/nfs/vol1 /mnt/v4 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/baseline && sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/vol1 /mnt/tuned && sudo mount -t nfs -o vers=3,nconnect=16,rsize=1048576,wsize=1048576,noatime,hard,proto=tcp 127.0.0.1:/srv/nfs/vol1 /mnt/optimized && sudo mount -t nfs -o vers=3,nconnect=8 127.0.0.1:/srv/nfs/vol1 /mnt/multi && sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single && echo "ALL MOUNTS READY — Good morning Venkatesh 🙏"
 
 -----> Scenario  
 
