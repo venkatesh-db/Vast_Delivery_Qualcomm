@@ -111,10 +111,12 @@ sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ done"
 
 -----> smiles 
 
+sudo rm /usr/local/bin/morning_healthcheck.sh
+
 sudo nano /usr/local/bin/morning_healthcheck.sh
 
-
-#!/bin/bash
+sudo python3 << 'EOF'
+script = """#!/bin/bash
 echo "=============================="
 echo " VAST Admin Morning Checklist"
 echo " $(date)"
@@ -138,6 +140,13 @@ echo "[6] Write Test"
 timeout 5 dd if=/dev/zero of=/mnt/client1/.hc bs=1M count=10 2>&1 | grep -E "copied|error"
 rm -f /mnt/client1/.hc
 echo "=============================="
+"""
+with open('/usr/local/bin/morning_healthcheck.sh', 'w') as f:
+    f.write(script)
+import os
+os.chmod('/usr/local/bin/morning_healthcheck.sh', 0o755)
+print("done")
+EOF
 
 sudo /usr/local/bin/morning_healthcheck.sh
 
