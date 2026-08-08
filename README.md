@@ -46,6 +46,10 @@ sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single
 
 findmnt -t nfs -o TARGET,SOURCE,OPTIONS
 
+findmnt -t nfs -o TARGET
+
+
+
 
 
 
