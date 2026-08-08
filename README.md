@@ -26,6 +26,30 @@ sudo systemctl enable nfs-kernel-server && sudo systemctl start nfs-kernel-serve
 for mnt in data client1 vol1 v3 v4 baseline tuned optimized multi single vast-data vast-scratch vast-archive lvmvol; do sudo mkdir -p /mnt/$mnt && echo "✓ /mnt/$mnt"; done
 
 
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1
+
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/vol1
+
+sudo mount -t nfs -o vers=3 127.0.0.1:/srv/nfs/vol1 /mnt/v3
+
+sudo mount -t nfs -o vers=4 127.0.0.1:/srv/nfs/vol1 /mnt/v4
+
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/baseline
+
+sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/vol1 /mnt/tuned
+
+sudo mount -t nfs -o vers=3,nconnect=16,rsize=1048576,wsize=1048576,noatime,hard,proto=tcp 127.0.0.1:/srv/nfs/vol1 /mnt/optimized
+
+sudo mount -t nfs -o vers=3,nconnect=8 127.0.0.1:/srv/nfs/vol1 /mnt/multi
+
+sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single
+
+findmnt -t nfs -o TARGET,SOURCE,OPTIONS
+
+
+
+
+
 
 
 ## 0. Install everything first
