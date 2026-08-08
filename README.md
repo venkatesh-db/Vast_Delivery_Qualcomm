@@ -1,6 +1,9 @@
 
 sudo apt install -y nfs-common nfs-kernel-server lvm2 sysstat iotop fio iperf3 net-tools ethtool hping3 nmap traceroute nload irqbalance cifs-utils smbclient nvme-cli lshw bc tree curl wget
 
+dpkg -l nfs-common nfs-kernel-server fio iperf3 sysstat lvm2 2>&1 | grep -E "^ii|^un"
+
+for tool in fio iperf3 iostat iotop dstat nfsstat nfsiostat mountstats showmount rpcinfo nvme lsblk lshw ethtool nmap traceroute tc ss netstat mpstat vmstat sar hping3 nload irqbalance; do which $tool > /dev/null 2>&1 && echo "✓ $tool" || echo "✗ MISSING: $tool"; done
 
 sudo apt install -y \
   nfs-common \
@@ -29,7 +32,7 @@ sudo apt install -y \
   curl \
   wget
 
-dpkg -l nfs-common nfs-kernel-server fio iperf3 sysstat lvm2 2>&1 | grep -E "^ii|^un"
+
 
 
 ## 0. Install everything first
