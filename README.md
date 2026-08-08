@@ -89,7 +89,55 @@ sudo modprobe sch_netem && echo "sch_netem" | sudo tee -a /etc/modules && echo "
 lsmod | grep sch_netem
 
 
+-----> vvv 
 
+Create Health Check Scripts
+
+sudo tee /usr/local/bin/nfs_healthcheck.sh << 'EOF'
+#!/bin/bash
+MOUNT="/mnt/client1"
+LOGFILE="/var/log/nfs_health.log"
+TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+if ! findmnt "$MOUNT" > /dev/null 2>&1; then
+  echo "$TIMESTAMP CRITICAL: $MOUNT not mounted" >> $LOGFILE; exit 2
+fi
+if ! timeout 5 touch "$MOUNT/.healthcheck" 2>/dev/null; then
+  echo "$TIMESTAMP CRITICAL: $MOUNT not writable" >> $LOGFILE; exit 2
+fi
+rm -f "$MOUNT/.healthcheck"
+RETRANS=$(nfsstat -c 2>/dev/null | awk 'NR==4{print $2}')
+echo "$TIMESTAMP OK: $MOUNT healthy retrans=$RETRANS" >> $LOGFILE
+EOF
+sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ healthcheck script created"
+
+
+sudo tee /usr/local/bin/morning_healthcheck.sh << 'EOF'
+#!/bin/bash
+echo "=============================="
+echo " VAST Admin Morning Checklist"
+echo " $(date)"
+echo "=============================="
+echo "[1] NFS Mounts"
+findmnt -t nfs,nfs4 -o TARGET,SOURCE
+echo ""
+echo "[2] Capacity"
+df -h /mnt/client1
+echo ""
+echo "[3] NFS Stats"
+nfsstat -c 2>/dev/null | head -6
+echo ""
+echo "[4] Connections"
+ss -tn dst :2049 | wc -l | xargs echo "NFS TCP connections:"
+echo ""
+echo "[5] Recent Errors"
+dmesg -T | grep -iE "error|fail|timeout" | tail -5 || echo "None"
+echo ""
+echo "[6] Write Test"
+timeout 5 dd if=/dev/zero of=/mnt/client1/.hc bs=1M count=10 2>&1 | grep -E "copied|error"
+rm -f /mnt/client1/.hc
+echo "=============================="
+EOF
+sudo chmod +x /usr/local/bin/morning_healthcheck.sh && echo "✓ morning script created"
 
 
 
