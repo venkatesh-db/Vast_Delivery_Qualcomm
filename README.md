@@ -91,24 +91,24 @@ lsmod | grep sch_netem
 
 -----> vvv 
 
-Create Health Check Scripts
-
-sudo tee /usr/local/bin/nfs_healthcheck.sh << 'EOF'
+sudo tee /usr/local/bin/nfs_healthcheck.sh > /dev/null << 'SCRIPTEOF'
 #!/bin/bash
 MOUNT="/mnt/client1"
 LOGFILE="/var/log/nfs_health.log"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 if ! findmnt "$MOUNT" > /dev/null 2>&1; then
-  echo "$TIMESTAMP CRITICAL: $MOUNT not mounted" >> $LOGFILE; exit 2
+  echo "$TIMESTAMP CRITICAL: $MOUNT not mounted" >> $LOGFILE
+  exit 2
 fi
 if ! timeout 5 touch "$MOUNT/.healthcheck" 2>/dev/null; then
-  echo "$TIMESTAMP CRITICAL: $MOUNT not writable" >> $LOGFILE; exit 2
+  echo "$TIMESTAMP CRITICAL: $MOUNT not writable" >> $LOGFILE
+  exit 2
 fi
 rm -f "$MOUNT/.healthcheck"
 RETRANS=$(nfsstat -c 2>/dev/null | awk 'NR==4{print $2}')
 echo "$TIMESTAMP OK: $MOUNT healthy retrans=$RETRANS" >> $LOGFILE
-EOF
-sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ healthcheck script created"
+SCRIPTEOF
+sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ healthcheck created"
 
 
 sudo tee /usr/local/bin/morning_healthcheck.sh << 'EOF'
