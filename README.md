@@ -139,7 +139,7 @@ timeout 5 dd if=/dev/zero of=/mnt/client1/.hc bs=1M count=10 2>&1 | grep -E "cop
 rm -f /mnt/client1/.hc
 echo "=============================="
 
-/usr/local/bin/morning_healthcheck.sh
+sudo /usr/local/bin/morning_healthcheck.sh
 
 sudo chmod +x /usr/local/bin/morning_healthcheck.sh && echo "✓ done"
 
