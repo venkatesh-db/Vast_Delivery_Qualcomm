@@ -48,6 +48,20 @@ findmnt -t nfs -o TARGET,SOURCE,OPTIONS
 
 findmnt -t nfs -o TARGET
 
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1
+
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/vol1
+
+sudo mount -t nfs -o vers=4 127.0.0.1:/srv/nfs/vol1 /mnt/v4
+
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/baseline
+
+sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/vol1 /mnt/tuned
+
+findmnt -t nfs -o TARGET
+
+
+
 
 
 
