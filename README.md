@@ -1,4 +1,6 @@
 
+sudo apt install -y nfs-common nfs-kernel-server lvm2 sysstat iotop fio iperf3 net-tools ethtool hping3 nmap traceroute nload irqbalance cifs-utils smbclient nvme-cli lshw bc tree curl wget
+
 
 sudo apt install -y \
   nfs-common \
