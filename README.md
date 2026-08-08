@@ -113,10 +113,8 @@ sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ done"
 
 sudo rm /usr/local/bin/morning_healthcheck.sh
 
-sudo python3 /tmp/make_script.py
+gedit /tmp/make_script.py
 
-
-cat > /tmp/make_script.py << 'PYEOF'
 import os
 content = """#!/bin/bash
 echo "=============================="
@@ -146,11 +144,12 @@ echo "=============================="
 open('/usr/local/bin/morning_healthcheck.sh','w').write(content)
 os.chmod('/usr/local/bin/morning_healthcheck.sh',0o755)
 print("done")
-PYEOF
 
 sudo python3 /tmp/make_script.py
-
 sudo /usr/local/bin/morning_healthcheck.sh
+
+for mnt in client1 vol1 v3 v4 baseline tuned optimized multi single; do findmnt /mnt/$mnt > /dev/null 2>&1 && echo "✓ /mnt/$mnt" || echo "✗ /mnt/$mnt"; done
+
 
 
 
