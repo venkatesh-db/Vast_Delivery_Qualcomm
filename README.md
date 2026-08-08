@@ -82,6 +82,12 @@ sudo mkfs.ext4 /dev/vast_vg/vol1 2>&1 | tail -3
 
 sudo mount /dev/vast_vg/vol1 /mnt/lvmvol && sudo chown $USER:$USER /mnt/lvmvol && df -h /mnt/lvmvol
 
+----> vv
+
+sudo modprobe sch_netem && echo "sch_netem" | sudo tee -a /etc/modules && echo "✓ netem loaded"
+
+lsmod | grep sch_netem
+
 
 
 
