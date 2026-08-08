@@ -166,28 +166,39 @@ sudo systemctl daemon-reload && sudo systemctl start nfs-kernel-server && sudo m
 Scenario 1: Map storage path end to end
 
 showmount -e 127.0.0.1
-findmnt /mnt/client1
-ls -la /mnt/client1
+findmnt -t nfs,nfs4 -o TARGET,SOURCE
 df -h /mnt/client1
+ls -la /mnt/client1
 
-
-Scenario 2: Simulate multi-volume layout
+Scenario 2: Multi-volume layout
 
 ls /srv/nfs/
-showmount -e 127.0.0.1
 touch /srv/nfs/aidata/ai_model.bin && echo "aidata write OK"
 touch /srv/nfs/scratch/temp.dat && echo "scratch write OK"
 ls /srv/nfs/aidata/
 ls /srv/nfs/scratch/
+showmount -e 127.0.0.1
 
 Distributed System Challenge
 
+# Terminal 1 — start writing
 dd if=/dev/zero of=/mnt/client1/bigfile bs=1M count=200 &
+
+# Simulate CNode failure
 sleep 2
 sudo systemctl stop nfs-kernel-server
 sleep 3
+
+# Recover
 sudo systemctl start nfs-kernel-server
+sleep 2
+wait
 ls -lh /mnt/client1/bigfile
+echo "Recovery complete"
+
+
+
+
 
 
 
