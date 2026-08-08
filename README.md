@@ -27,7 +27,7 @@ sudo apt install -y \
   curl \
   wget
 
-
+dpkg -l nfs-common nfs-kernel-server fio iperf3 sysstat lvm2 2>&1 | grep -E "^ii|^un"
 
 
 ## 0. Install everything first
