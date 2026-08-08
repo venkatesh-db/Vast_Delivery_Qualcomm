@@ -111,8 +111,9 @@ sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ done"
 
 -----> smiles 
 
-sudo rm /usr/local/bin/morning_healthcheck.sh
+<<<<<<<<< NOT WORKING  >>>>>>>>
 
+sudo rm /usr/local/bin/morning_healthcheck.sh
 gedit /tmp/make_script.py
 
 import os
@@ -145,14 +146,16 @@ open('/usr/local/bin/morning_healthcheck.sh','w').write(content)
 os.chmod('/usr/local/bin/morning_healthcheck.sh',0o755)
 print("done")
 
+<<<<<<<<< NOT WORKING  >>>>>>>>
+
+
 printf '#!/bin/bash\nfindmnt -t nfs,nfs4 -o TARGET,SOURCE\ndf -h /mnt/client1\nnfsstat -c 2>/dev/null | head -6\n' | sudo tee /usr/local/bin/morning_healthcheck.sh && sudo chmod +x /usr/local/bin/morning_healthcheck.sh && echo "done"
 
 sudo /usr/local/bin/morning_healthcheck.sh
 
-sudo python3 /tmp/make_script.py
-sudo /usr/local/bin/morning_healthcheck.sh
-
 for mnt in client1 vol1 v3 v4 baseline tuned optimized multi single; do findmnt /mnt/$mnt > /dev/null 2>&1 && echo "✓ /mnt/$mnt" || echo "✗ /mnt/$mnt"; done
+
+sudo systemctl start nfs-kernel-server && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/vol1 && sudo mount -t nfs -o vers=3 127.0.0.1:/srv/nfs/vol1 /mnt/v3 && sudo mount -t nfs -o vers=4 127.0.0.1:/srv/nfs/vol1 /mnt/v4 && sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/baseline && sudo mount -t nfs -o nconnect=8,rsize=1048576,wsize=1048576 127.0.0.1:/srv/nfs/vol1 /mnt/tuned && sudo mount -t nfs -o vers=3,nconnect=16,rsize=1048576,wsize=1048576,noatime,hard,proto=tcp 127.0.0.1:/srv/nfs/vol1 /mnt/optimized && sudo mount -t nfs -o vers=3,nconnect=8 127.0.0.1:/srv/nfs/vol1 /mnt/multi && sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single && echo "ALL MOUNTS READY"
 
 
 -----> Scenario  
