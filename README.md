@@ -21,6 +21,8 @@ sudo bash -c 'echo "/srv/nfs/archive 127.0.0.1(ro,sync,no_subtree_check)" >> /et
 
 cat /etc/exports | grep srv
 
+sudo systemctl enable nfs-kernel-server && sudo systemctl start nfs-kernel-server && sudo systemctl enable rpcbind && sudo systemctl start rpcbind && sudo exportfs -ra && showmount -e 127.0.0.1
+
 
 
 
