@@ -113,9 +113,44 @@ sudo chmod +x /usr/local/bin/nfs_healthcheck.sh && echo "✓ done"
 
 sudo rm /usr/local/bin/morning_healthcheck.sh
 
-sudo python3 -c "import os; open('/usr/local/bin/morning_healthcheck.sh','w').write('#!/bin/bash\necho \"==============================\"\necho \" VAST Admin Morning Checklist\"\necho \" \$(date)\"\necho \"==============================\"\necho \"[1] NFS Mounts\"\nfindmnt -t nfs,nfs4 -o TARGET,SOURCE\necho \"\"\necho \"[2] Capacity\"\ndf -h /mnt/client1\necho \"\"\necho \"[3] NFS Stats\"\nnfsstat -c 2>/dev/null | head -6\necho \"\"\necho \"[4] Connections\"\nss -tn dst :2049 | wc -l | xargs echo \"NFS TCP connections:\"\necho \"\"\necho \"[5] Recent Errors\"\ndmesg -T | grep -iE \"error|fail|timeout\" | tail -5 || echo \"None\"\necho \"\"\necho \"[6] Write Test\"\ntimeout 5 dd if=/dev/zero of=/mnt/client1/.hc bs=1M count=10 2>&1 | grep -E \"copied|error\"\nrm -f /mnt/client1/.hc\necho \"==============================\"\n'); os.chmod('/usr/local/bin/morning_healthcheck.sh',0o755); print('done')"
+sudo python3 /tmp/make_script.py
 
-cat /usr/local/bin/morning_healthcheck.sh
+
+cat > /tmp/make_script.py << 'PYEOF'
+import os
+content = """#!/bin/bash
+echo "=============================="
+echo " VAST Admin Morning Checklist"
+echo " $(date)"
+echo "=============================="
+echo "[1] NFS Mounts"
+findmnt -t nfs,nfs4 -o TARGET,SOURCE
+echo ""
+echo "[2] Capacity"
+df -h /mnt/client1
+echo ""
+echo "[3] NFS Stats"
+nfsstat -c 2>/dev/null | head -6
+echo ""
+echo "[4] Connections"
+ss -tn dst :2049 | wc -l | xargs echo "NFS TCP connections:"
+echo ""
+echo "[5] Recent Errors"
+dmesg -T | grep -iE "error|fail|timeout" | tail -5 || echo "None"
+echo ""
+echo "[6] Write Test"
+timeout 5 dd if=/dev/zero of=/mnt/client1/.hc bs=1M count=10 2>&1 | grep -E "copied|error"
+rm -f /mnt/client1/.hc
+echo "=============================="
+"""
+open('/usr/local/bin/morning_healthcheck.sh','w').write(content)
+os.chmod('/usr/local/bin/morning_healthcheck.sh',0o755)
+print("done")
+PYEOF
+
+sudo python3 /tmp/make_script.py
+
+sudo /usr/local/bin/morning_healthcheck.sh
 
 
 
