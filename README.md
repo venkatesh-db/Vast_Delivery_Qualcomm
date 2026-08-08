@@ -145,6 +145,10 @@ open('/usr/local/bin/morning_healthcheck.sh','w').write(content)
 os.chmod('/usr/local/bin/morning_healthcheck.sh',0o755)
 print("done")
 
+printf '#!/bin/bash\nfindmnt -t nfs,nfs4 -o TARGET,SOURCE\ndf -h /mnt/client1\nnfsstat -c 2>/dev/null | head -6\n' | sudo tee /usr/local/bin/morning_healthcheck.sh && sudo chmod +x /usr/local/bin/morning_healthcheck.sh && echo "done"
+
+sudo /usr/local/bin/morning_healthcheck.sh
+
 sudo python3 /tmp/make_script.py
 sudo /usr/local/bin/morning_healthcheck.sh
 
