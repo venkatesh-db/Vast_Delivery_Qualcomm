@@ -67,6 +67,10 @@ done
 
 ## Distributed System Challenge: Parallel jobs
 ```bash
+
+echo "=== 1 Job ===" && fio --name=j1 --rw=write --bs=1M --size=256M --directory=/mnt/client1 --numjobs=1 --group_reporting 2>&1 | grep bw= && echo "=== 4 Jobs ===" && fio --name=j4 --rw=write --bs=1M --size=256M --directory=/mnt/client1 --numjobs=4 --group_reporting 2>&1 | grep bw= && echo "=== 8 Jobs ===" && fio --name=j8 --rw=write --bs=1M --size=256M --directory=/mnt/client1 --numjobs=8 --group_reporting 2>&1 | grep bw=
+
+
 echo "=== 1 Job ==="
 fio --name=j1 --rw=write --bs=1M --size=256M \
 --directory=/mnt/client1 --numjobs=1 --group_reporting \
