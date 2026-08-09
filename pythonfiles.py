@@ -569,7 +569,30 @@ sudo mount -t nfs -o vers=3,nconnect=8 127.0.0.1:/srv/nfs/vol1 /mnt/multi
 sudo mount -t nfs -o vers=3,nconnect=1 127.0.0.1:/srv/nfs/vol1 /mnt/single
 findmnt -t nfs,nfs4 -o TARGET,SOURCE && echo "ALL MOUNTS RESTORED"
 ```
+------> Tough modules 
 
----
+# Test 1: tc netem
+sudo tc qdisc del dev lo root 2>/dev/null
+sudo tc qdisc add dev lo root netem delay 20ms && echo "✓ tc works"
+sudo tc qdisc del dev lo root && echo "✓ tc cleaned"
 
-Venkatesh — every command above uses your exact verified paths. Zero errors guaranteed. Ready for Qualcomm delivery. 🙏
+# Test 2: Stale mount
+sudo systemctl stop nfs-kernel-server
+timeout 5 ls /mnt/client1 || echo "✓ stale detected"
+sudo systemctl start nfs-kernel-server
+sleep 2
+sudo mount -t nfs 127.0.0.1:/srv/nfs/vol1 /mnt/client1
+echo "✓ recovered"
+
+# Test 3: Permission break and fix
+sudo chown root:root /srv/nfs/vol1
+touch /mnt/client1/test 2>&1 || echo "✓ permission denied works"
+sudo chown $USER:$USER /srv/nfs/vol1 && sudo chmod 755 /srv/nfs/vol1
+touch /mnt/client1/test && echo "✓ fix works" && rm /mnt/client1/test
+
+# Test 4: journalctl
+sudo systemctl restart nfs-kernel-server && sleep 2
+sudo journalctl -u nfs-kernel-server --since "2 minutes ago" | tail -5
+
+# Test 5: watch (just 6 seconds then auto exit)
+timeout 6 watch -n3 'findmnt -t nfs,nfs4 -o TARGET,SOURCE' || echo "✓ watch works"
