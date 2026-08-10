@@ -1,26 +1,17 @@
 
 
-io --name=randread \
-
---filename=/dev/nvme0n1 \
-
---direct=1 \
-
---ioengine=io_uring \
-
---rw=randread \
-
---bs=4k \
-
---iodepth=128 \
-
---numjobs=8 \
-
---runtime=60 \
-
---time_based \
-
---group_reporting
+fio --name=randread \
+  --filename=/mnt/client1/fio-test.dat \
+  --direct=1 \
+  --ioengine=io_uring \
+  --rw=randread \
+  --bs=4k \
+  --iodepth=128 \
+  --numjobs=8 \
+  --size=1G \
+  --runtime=60 \
+  --time_based \
+  --group_reporting
 
 
 
