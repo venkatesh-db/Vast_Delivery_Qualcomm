@@ -1,4 +1,30 @@
 
+
+io --name=randread \
+
+--filename=/dev/nvme0n1 \
+
+--direct=1 \
+
+--ioengine=io_uring \
+
+--rw=randread \
+
+--bs=4k \
+
+--iodepth=128 \
+
+--numjobs=8 \
+
+--runtime=60 \
+
+--time_based \
+
+--group_reporting
+
+
+
+
 sudo apt install -y nfs-common nfs-kernel-server lvm2 sysstat iotop fio iperf3 net-tools ethtool hping3 nmap traceroute nload irqbalance cifs-utils smbclient nvme-cli lshw bc tree curl wget
 
 dpkg -l nfs-common nfs-kernel-server fio iperf3 sysstat lvm2 2>&1 | grep -E "^ii|^un"
