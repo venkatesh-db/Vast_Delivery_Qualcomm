@@ -1,4 +1,18 @@
 
+fio --name=randread \
+  --filename=/mnt/client1/fio-test.dat \
+  --direct=1 \
+  --ioengine=io_uring \
+  --rw=randread \
+  --bs=4k \
+  --iodepth=128 \
+  --numjobs=8 \
+  --size=1G \
+  --runtime=60 \
+  --time_based \
+  --group_reporting
+
+
 
 # MODULE 1 — Storage Architecture
 
